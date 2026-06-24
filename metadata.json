@@ -1,0 +1,6 @@
+{
+  "name": "Botswana Bus Booking",
+  "description": "A bus ticket booking app for Botswana featuring seat reservation and local mobile money payments.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

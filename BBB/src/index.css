@@ -1,0 +1,118 @@
+@import "tailwindcss";
+
+/* ─── Theme CSS Variables ─────────────────────────────────────────── */
+
+:root {
+  /* Default theme (matches current Tailwind slate palette) */
+  --bg-page:        #f8fafc;
+  --bg-card:        #ffffff;
+  --bg-muted:       #f1f5f9;
+  --bg-input:       #ffffff;
+  --border:         #e2e8f0;
+  --border-subtle:  #f1f5f9;
+  --text-primary:   #0f172a;
+  --text-secondary: #475569;
+  --text-muted:     #94a3b8;
+  --accent:         #75AADB;
+  --accent-text:    #4287B9;
+  --accent-bg:      rgba(117,170,219,0.1);
+  --tab-active-bg:  #ffffff;
+  --tab-active-txt: #0f172a;
+  --shadow:         0 1px 3px rgba(0,0,0,0.08);
+  --radius:         1rem;
+  --font-body:      'Inter', system-ui, sans-serif;
+  --flag-stripe:    #75AADB;
+  --flag-center:    #000000;
+}
+
+/* ─── E-Ink Theme ─────────────────────────────────────────────────── */
+[data-theme="eink"] {
+  --bg-page:        #f5f5f0;
+  --bg-card:        #ffffff;
+  --bg-muted:       #ebebeb;
+  --bg-input:       #fafafa;
+  --border:         #1a1a1a;
+  --border-subtle:  #cccccc;
+  --text-primary:   #000000;
+  --text-secondary: #333333;
+  --text-muted:     #666666;
+  --accent:         #000000;
+  --accent-text:    #000000;
+  --accent-bg:      rgba(0,0,0,0.06);
+  --tab-active-bg:  #000000;
+  --tab-active-txt: #ffffff;
+  --shadow:         2px 2px 0 #000000;
+  --radius:         0.25rem;
+  --font-body:      'Georgia', 'Times New Roman', serif;
+  --flag-stripe:    #888888;
+  --flag-center:    #000000;
+}
+
+/* ─── Minimal Theme ───────────────────────────────────────────────── */
+[data-theme="minimal"] {
+  --bg-page:        #ffffff;
+  --bg-card:        #ffffff;
+  --bg-muted:       #fafafa;
+  --bg-input:       #f9f9f9;
+  --border:         #e8e8e8;
+  --border-subtle:  #f0f0f0;
+  --text-primary:   #111111;
+  --text-secondary: #555555;
+  --text-muted:     #aaaaaa;
+  --accent:         #111111;
+  --accent-text:    #111111;
+  --accent-bg:      rgba(0,0,0,0.04);
+  --tab-active-bg:  #111111;
+  --tab-active-txt: #ffffff;
+  --shadow:         none;
+  --radius:         0.375rem;
+  --font-body:      'DM Sans', 'Helvetica Neue', sans-serif;
+  --flag-stripe:    #cccccc;
+  --flag-center:    #111111;
+}
+
+/* ─── Soothing Theme ──────────────────────────────────────────────── */
+[data-theme="soothing"] {
+  --bg-page:        #f0f4f0;
+  --bg-card:        #fafcfa;
+  --bg-muted:       #e8ede8;
+  --bg-input:       #f4f8f4;
+  --border:         #c8d8c8;
+  --border-subtle:  #ddeadd;
+  --text-primary:   #2d3d2d;
+  --text-secondary: #4a5e4a;
+  --text-muted:     #7a957a;
+  --accent:         #5a8a6a;
+  --accent-text:    #3d6b4d;
+  --accent-bg:      rgba(90,138,106,0.1);
+  --tab-active-bg:  #5a8a6a;
+  --tab-active-txt: #ffffff;
+  --shadow:         0 2px 8px rgba(45,61,45,0.08);
+  --radius:         0.875rem;
+  --font-body:      'Nunito', 'Segoe UI', sans-serif;
+  --flag-stripe:    #8ab89a;
+  --flag-center:    #2d3d2d;
+}
+
+/* ─── Apply Variables to Base Elements ───────────────────────────── */
+body {
+  background-color: var(--bg-page);
+  color: var(--text-primary);
+  font-family: var(--font-body);
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* Theme-aware utility classes used across components */
+.t-bg-page     { background-color: var(--bg-page); }
+.t-bg-card     { background-color: var(--bg-card); }
+.t-bg-muted    { background-color: var(--bg-muted); }
+.t-bg-input    { background-color: var(--bg-input); }
+.t-border      { border-color: var(--border); }
+.t-border-sub  { border-color: var(--border-subtle); }
+.t-text        { color: var(--text-primary); }
+.t-text-sec    { color: var(--text-secondary); }
+.t-text-muted  { color: var(--text-muted); }
+.t-accent      { color: var(--accent-text); }
+.t-accent-bg   { background-color: var(--accent-bg); }
+.t-shadow      { box-shadow: var(--shadow); }
+.t-radius      { border-radius: var(--radius); }
