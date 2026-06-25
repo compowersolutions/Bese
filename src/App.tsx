@@ -8,15 +8,17 @@ import { seedInitialData, getTrips } from './lib/dbService';
 import { Trip } from './types';
 import PassengerPortal from './components/PassengerPortal';
 import OperatorPortal from './components/OperatorPortal';
-import { Bus, Settings, Users, Compass, ShieldCheck, Heart } from 'lucide-react';
+import SettingsPanel from './components/SettingsPanel';
+import { useTheme } from './ThemeContext';
+import { Bus, Settings, Users, Heart, SlidersHorizontal } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 
 export default function App() {
   const [role, setRole] = useState<'passenger' | 'operator'>('passenger');
   const [trips, setTrips] = useState<Trip[]>([]);
   const [isSeeding, setIsSeeding] = useState(true);
+  const { setSettingsOpen } = useTheme();
 
-  // Initialize and load trips
   const loadTrips = async () => {
     try {
       const allTrips = await getTrips();
@@ -29,78 +31,135 @@ export default function App() {
   useEffect(() => {
     const initializeDatabase = async () => {
       setIsSeeding(true);
-      await seedInitialData(); // Pre-populate Botswana operators, routes, and buses
+      await seedInitialData();
       await loadTrips();
       setIsSeeding(false);
     };
-
     initializeDatabase();
   }, []);
 
   return (
-    <div className="min-h-screen bg-slate-50/50 text-slate-800 font-sans selection:bg-sky-100 flex flex-col justify-between">
+    <div
+      className="min-h-screen font-sans flex flex-col justify-between transition-colors duration-300"
+      style={{ backgroundColor: 'var(--bg-page)', color: 'var(--text-primary)', fontFamily: 'var(--font-body)' }}
+    >
       {/* Botswana Flag-inspired accent line */}
       <div className="w-full h-1.5 flex">
-        <div className="flex-1 bg-[#75AADB]" title="Sky Blue (Rain / Pula)" />
-        <div className="w-4 bg-white" />
-        <div className="w-12 bg-black" />
-        <div className="w-4 bg-white" />
-        <div className="flex-1 bg-[#75AADB]" title="Sky Blue (Rain / Pula)" />
+        <div className="flex-1" style={{ backgroundColor: 'var(--flag-stripe)' }} title="Sky Blue (Rain / Pula)" />
+        <div className="w-4" style={{ backgroundColor: 'var(--bg-card)' }} />
+        <div className="w-12" style={{ backgroundColor: 'var(--flag-center)' }} />
+        <div className="w-4" style={{ backgroundColor: 'var(--bg-card)' }} />
+        <div className="flex-1" style={{ backgroundColor: 'var(--flag-stripe)' }} title="Sky Blue (Rain / Pula)" />
       </div>
 
       <div className="flex-grow max-w-5xl w-full mx-auto px-4 py-8 md:py-12 space-y-8">
-        {/* Sleek Minimalist Header */}
-        <header className="flex flex-col md:flex-row justify-between items-center gap-6 border-b border-slate-100 pb-6">
+        {/* Header */}
+        <header
+          className="flex flex-col md:flex-row justify-between items-center gap-6 pb-6"
+          style={{ borderBottom: '1px solid var(--border-subtle)' }}
+        >
+          {/* Logo */}
           <div className="flex items-center gap-3">
-            <div className="w-11 h-11 bg-slate-900 text-white rounded-2xl flex items-center justify-center shadow-lg shadow-slate-950/10">
-              <Bus className="w-6 h-6 text-[#75AADB]" />
+            <div
+              className="w-11 h-11 flex items-center justify-center shadow-lg transition-all duration-300"
+              style={{
+                backgroundColor: 'var(--text-primary)',
+                borderRadius: 'var(--radius)',
+                boxShadow: 'var(--shadow)',
+              }}
+            >
+              <Bus className="w-6 h-6" style={{ color: 'var(--accent)' }} />
             </div>
             <div>
               <div className="flex items-center gap-2">
-                <h1 className="text-xl font-black text-slate-900 tracking-tight">Botswana Bus Booking</h1>
-                <span className="bg-[#75AADB]/10 text-[#4287B9] text-[9px] font-bold px-1.5 py-0.5 rounded uppercase tracking-wider font-mono">
+                <h1 className="text-xl font-black tracking-tight" style={{ color: 'var(--text-primary)' }}>
+                  Botswana Bus Booking
+                </h1>
+                <span
+                  className="text-[9px] font-bold px-1.5 py-0.5 uppercase tracking-wider font-mono"
+                  style={{
+                    backgroundColor: 'var(--accent-bg)',
+                    color: 'var(--accent-text)',
+                    borderRadius: '0.25rem',
+                  }}
+                >
                   PULA
                 </span>
               </div>
-              <p className="text-xs text-slate-400 mt-0.5">Online Transit & Seat Reservation Engine</p>
+              <p className="text-xs mt-0.5" style={{ color: 'var(--text-muted)' }}>
+                Online Transit &amp; Seat Reservation Engine
+              </p>
             </div>
           </div>
 
-          {/* Mode Switcher */}
-          <div className="flex bg-slate-100 p-1 rounded-2xl border border-slate-200/50">
-            <button
-              onClick={() => setRole('passenger')}
-              className={`px-4 py-2 rounded-xl text-xs font-bold transition-all duration-300 flex items-center gap-2
-                ${role === 'passenger'
-                  ? 'bg-white text-slate-900 shadow-sm'
-                  : 'text-slate-500 hover:text-slate-800'
-                }
-              `}
+          {/* Right side: Mode switcher + Settings button */}
+          <div className="flex items-center gap-3">
+            {/* Mode Switcher */}
+            <div
+              className="flex p-1"
+              style={{
+                backgroundColor: 'var(--bg-muted)',
+                borderRadius: 'calc(var(--radius) + 2px)',
+                border: '1px solid var(--border-subtle)',
+              }}
             >
-              <Users className="w-4 h-4" />
-              Book Ticket
-            </button>
+              <button
+                onClick={() => setRole('passenger')}
+                className="px-4 py-2 text-xs font-bold transition-all duration-300 flex items-center gap-2"
+                style={{
+                  backgroundColor: role === 'passenger' ? 'var(--tab-active-bg)' : 'transparent',
+                  color: role === 'passenger' ? 'var(--tab-active-txt)' : 'var(--text-muted)',
+                  borderRadius: 'var(--radius)',
+                  boxShadow: role === 'passenger' ? 'var(--shadow)' : 'none',
+                }}
+              >
+                <Users className="w-4 h-4" />
+                Book Ticket
+              </button>
+              <button
+                onClick={() => setRole('operator')}
+                className="px-4 py-2 text-xs font-bold transition-all duration-300 flex items-center gap-2"
+                style={{
+                  backgroundColor: role === 'operator' ? 'var(--tab-active-bg)' : 'transparent',
+                  color: role === 'operator' ? 'var(--tab-active-txt)' : 'var(--text-muted)',
+                  borderRadius: 'var(--radius)',
+                  boxShadow: role === 'operator' ? 'var(--shadow)' : 'none',
+                }}
+              >
+                <Settings className="w-4 h-4" />
+                Operator Portal
+              </button>
+            </div>
+
+            {/* Settings Button */}
             <button
-              onClick={() => setRole('operator')}
-              className={`px-4 py-2 rounded-xl text-xs font-bold transition-all duration-300 flex items-center gap-2
-                ${role === 'operator'
-                  ? 'bg-white text-slate-900 shadow-sm'
-                  : 'text-slate-500 hover:text-slate-800'
-                }
-              `}
+              onClick={() => setSettingsOpen(true)}
+              title="Settings"
+              className="w-10 h-10 flex items-center justify-center transition-all duration-200 hover:opacity-80"
+              style={{
+                backgroundColor: 'var(--bg-muted)',
+                color: 'var(--text-secondary)',
+                borderRadius: 'var(--radius)',
+                border: '1px solid var(--border-subtle)',
+                boxShadow: 'var(--shadow)',
+              }}
             >
-              <Settings className="w-4 h-4" />
-              Operator Portal
+              <SlidersHorizontal className="w-4 h-4" />
             </button>
           </div>
         </header>
 
-        {/* Database initial seed loader */}
+        {/* Loading state */}
         {isSeeding ? (
-          <div className="flex flex-col items-center justify-center py-20 text-slate-400 font-sans">
-            <span className="w-8 h-8 border-4 border-sky-100 border-t-sky-500 rounded-full animate-spin mb-4" />
+          <div className="flex flex-col items-center justify-center py-20" style={{ color: 'var(--text-muted)' }}>
+            <span
+              className="w-8 h-8 border-4 rounded-full animate-spin mb-4"
+              style={{ borderColor: 'var(--bg-muted)', borderTopColor: 'var(--accent)' }}
+            />
             <p className="text-xs font-medium">Synchronizing Botswana Transit Database...</p>
-            <p className="text-[10px] text-slate-400/80 mt-1">Downloading Seabelo, AT&T, and Tsela-Kaye operators</p>
+            <p className="text-[10px] mt-1" style={{ color: 'var(--text-muted)' }}>
+              Downloading Seabelo, AT&amp;T, and Tsela-Kaye operators
+            </p>
           </div>
         ) : (
           <main className="min-h-[500px]">
@@ -131,9 +190,15 @@ export default function App() {
         )}
       </div>
 
-      {/* Humble Minimalist Footer */}
-      <footer className="border-t border-slate-100 py-6 mt-12 bg-white">
-        <div className="max-w-5xl w-full mx-auto px-4 flex flex-col sm:flex-row justify-between items-center gap-4 text-xs text-slate-400 font-sans">
+      {/* Footer */}
+      <footer
+        className="py-6 mt-12"
+        style={{ borderTop: '1px solid var(--border-subtle)', backgroundColor: 'var(--bg-card)' }}
+      >
+        <div
+          className="max-w-5xl w-full mx-auto px-4 flex flex-col sm:flex-row justify-between items-center gap-4"
+          style={{ fontSize: '11px', color: 'var(--text-muted)', fontFamily: 'var(--font-body)' }}
+        >
           <div className="flex items-center gap-1.5">
             <span>Powered by Botswana Mobile Money Services</span>
             <div className="w-1.5 h-1.5 bg-orange-500 rounded-full" title="Orange Money" />
@@ -146,6 +211,9 @@ export default function App() {
           </div>
         </div>
       </footer>
+
+      {/* Settings Panel (slide-in from right) */}
+      <SettingsPanel />
     </div>
   );
 }
